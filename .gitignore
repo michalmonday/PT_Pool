@@ -1,0 +1,7 @@
+dist
+pyproject.toml
+unused/
+venv/
+__pycache__/
+build/
+*swp
