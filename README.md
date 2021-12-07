@@ -1,11 +1,18 @@
 
 ## What PT\_Pool?
+
 It's a combined process+threading pool. (having only "apply\_async" method for now)  
 
 ThreadPoolExecutor on its own doesn't utilize more than one CPU core.  
 ProcessPoolExecutor on its own is not suitable to provide concurrency (e.g. slows down the system when large number of processes are created, and doesn't allow to create more than around 1000 processes on my system).  
 
+## Installation
+
+`python3.7 -m pip install PT_Pool`  
+
+
 ## Usage
+
 ```python
 from PT_Pool import PT_Pool
 import time
