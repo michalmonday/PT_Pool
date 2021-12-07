@@ -44,7 +44,7 @@ class PT_Pool:
                 logging.error(e)
 
 
-    def apply_async(self, f, *all_args, on_result=(lambda:None)):
+    def apply_async(self, f, *all_args, on_result=(lambda res:None)):
         assert callable(on_result), 'supplied on_result is not callable'
         if not self.task_queues:
             logging.warning(f'{__class__.__name__} apply_async self.tasks_queues is empty, waiting for initialization...')

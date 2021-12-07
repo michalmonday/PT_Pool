@@ -1,5 +1,4 @@
 dist
-pyproject.toml
 unused/
 venv/
 __pycache__/
