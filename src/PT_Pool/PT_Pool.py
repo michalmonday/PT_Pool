@@ -10,16 +10,10 @@ import logging
 
 class PT_Pool:
     def __init__(self, threads_limit=100):
-        self.worker_thread = Thread(target=self.worker, daemon=True, args=[threads_limit])
-        self.worker_thread.start()
-        self.on_results = {}
-        self.task_queues = []
-
-
-    def worker(self, threads_limit):
         self.procs = []
         procs_count = mp.cpu_count()
         threads_pp = math.ceil( threads_limit / procs_count ) # threads per process
+        self.on_results = {}
         self.task_queues = [mp.JoinableQueue() for _ in range(procs_count)] # multiple queues for the sake of even distribution
         self.result_queue = mp.Queue() # will allow calling "on_result" from the same process which is important
         for i in range(procs_count):
@@ -29,6 +23,10 @@ class PT_Pool:
         for p in self.procs:
             p.start()
 
+        self.worker_thread = Thread(target=self.worker, daemon=True, args=[threads_limit])
+        self.worker_thread.start()
+
+    def worker(self, threads_limit):
         while True:
             id_ , res = self.result_queue.get()
             on_result = self.on_results.get(id_, None)
@@ -77,6 +75,9 @@ class PT_Pool:
                 for args in zip(*all_args):
                     future = executor.submit(f, *args)
                     future.add_done_callback(partial(on_completed, id_=id_))
+
+if __name__ == '__main__':
+    pt_pool = PT_Pool()
         # print('end proc id', proc_id, ' cpu core=', psutil.Process().cpu_num())
 
     # def terminate(self):
